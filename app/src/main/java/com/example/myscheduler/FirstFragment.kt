@@ -45,6 +45,15 @@ class FirstFragment : Fragment() {
         val schedules = realm.where<Schedule>().findAll()
         val adapter = ScheduleAdapter(schedules)
         binding.list.adapter = adapter
+
+        adapter.setOnItemClickListerner { id ->
+            id?.let {
+                val action = FirstFragmentDirections.actionToScheduleEditFragment(it)
+                findNavController().navigate(action)
+            }
+        }
+
+       // (activity as? MainActivity)?.setFabVisible(View.INVISIBLE)
     }
 
     override fun onDestroyView() {
