@@ -1,6 +1,7 @@
 package com.example.myscheduler
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -17,6 +18,8 @@ class MainActivity : AppCompatActivity() {
 
         val naviController = findNavController(R.id.nav_host_fragment)
         setupActionBarWithNavController(naviController)
+
+        setFabVisible(View.VISIBLE)
 
         binding.fab.setOnClickListener {view ->
             naviController.navigate(R.id.action_to_scheduleEditFragment)

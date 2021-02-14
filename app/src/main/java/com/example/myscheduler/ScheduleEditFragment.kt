@@ -56,9 +56,13 @@ class ScheduleEditFragment : Fragment() {
             binding.timeEdit.setText(DateFormat.format("HH:mm", schedule?.date))
             binding.titleEdit.setText(schedule?.title)
             binding.detailEdit.setText(schedule?.detail)
+            binding.delete.visibility = View.VISIBLE
+        }else {
+            binding.delete.visibility = View.INVISIBLE
         }
         (activity as? MainActivity)?.setFabVisible(View.INVISIBLE)
         binding.save.setOnClickListener { saveSchedule(it) }
+        binding.delete.setOnClickListener { deleteSchedule(it) }
     }
 
     private fun saveSchedule(view: View){
@@ -78,7 +82,10 @@ class ScheduleEditFragment : Fragment() {
                 }
 
                 Snackbar.make(view, "追加しました。", Snackbar.LENGTH_SHORT)
-                        .setAction("戻る") {findNavController().popBackStack()}
+                        .setAction("戻る") {
+                            (activity as? MainActivity)?.setFabVisible(View.VISIBLE)
+                            findNavController().popBackStack()
+                        }
                         .setActionTextColor(Color.YELLOW)
                         .show()
             }
@@ -97,6 +104,19 @@ class ScheduleEditFragment : Fragment() {
                     .show()
             }
         }
+    }
+
+    private fun deleteSchedule(view: View){
+        realm.executeTransaction {db: Realm ->
+            db.where<Schedule>().equalTo("id", args.scheduleId)
+                    ?.findFirst()
+                    ?.deleteFromRealm()
+        }
+        Snackbar.make(view, "削除しました。", Snackbar.LENGTH_SHORT)
+                .setActionTextColor(Color.YELLOW)
+                .show()
+        (activity as? MainActivity)?.setFabVisible(View.VISIBLE)
+        findNavController().popBackStack()
     }
 
     override fun onDestroyView() {

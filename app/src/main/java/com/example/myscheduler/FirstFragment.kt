@@ -37,6 +37,8 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as? MainActivity)?.setFabVisible(View.VISIBLE)
+
         view.findViewById<Button>(R.id.button_first).setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
@@ -46,14 +48,14 @@ class FirstFragment : Fragment() {
         val adapter = ScheduleAdapter(schedules)
         binding.list.adapter = adapter
 
-        adapter.setOnItemClickListerner { id ->
+        adapter.setOnItemClickListener { id ->
+            (activity as? MainActivity)?.setFabVisible(View.INVISIBLE)
             id?.let {
                 val action = FirstFragmentDirections.actionToScheduleEditFragment(it)
                 findNavController().navigate(action)
             }
         }
 
-       // (activity as? MainActivity)?.setFabVisible(View.INVISIBLE)
     }
 
     override fun onDestroyView() {
